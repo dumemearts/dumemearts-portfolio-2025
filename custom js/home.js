@@ -28,49 +28,7 @@ function initButtonCharacterStagger() {
   });
   
   
-  
-  
-  
-  
-  // HERO DIGITAL DESIGNER TEXT STAGGER DESKTOP
-  document.addEventListener("DOMContentLoaded", function () {
-	function initGSAPAnimation() {
-	  let isTabletOrBelow = window.innerWidth <= 991;
-  
-	  gsap.from(".heading-letter-h1, .heading-letter-h1.is--space", {
-		y: 100,
-		opacity: 0,
-		duration: 0.4,
-		stagger: 0.05,
-		ease: "power3.out",
-		delay: 1.3,
-		scrollTrigger: {
-		  trigger: ".hero-inner",
-		  start: "top 80%",
-		  end: "bottom 20%",
-		  toggleActions: isTabletOrBelow ? "play none none none" : "restart none none none", 
-		  onEnter: isTabletOrBelow
-			? null
-			: (self) => setTimeout(() => self.animation.restart(), 500),
-		  onEnterBack: isTabletOrBelow
-			? null
-			: (self) => setTimeout(() => self.animation.restart(), 500),
-		  once: isTabletOrBelow, // Ensures it only plays once on tablet and below
-		},
-	  });
-	}
-  
-	initGSAPAnimation(); // Run animation check on page load
-  
-	// Listen for window resize to dynamically reinitialize animation
-	window.addEventListener("resize", function () {
-	  gsap.killTweensOf(".heading-letter, .heading-letter.is--space"); // Kill animation on resize
-	  initGSAPAnimation(); // Reinitialize animation
-	});
-  });
-  
-  
-  
+
   
   
   
@@ -686,6 +644,75 @@ function initButtonCharacterStagger() {
   
   
   
+
+
+
+
+
   
+  // EXPERTISE HOVER
+  document.addEventListener("DOMContentLoaded", function () {
+	// Only run this script on desktop
+	if (window.innerWidth > 991) {
+	  const list = document.querySelector('.main-title-list');
+	  const items = document.querySelectorAll('.main-title-item');
+  
+	  if (!list || !items.length) return;
+  
+	  items.forEach(item => {
+		item.addEventListener('mouseenter', () => {
+		  items.forEach(el => {
+			if (el !== item) {
+			  el.style.opacity = '0.25';
+			  el.style.filter = 'grayscale(100%)';
+			}
+		  });
+		});
+  
+		item.addEventListener('mouseleave', () => {
+		  items.forEach(el => {
+			el.style.opacity = '';
+			el.style.filter = '';
+		  });
+		});
+	  });
+	}
+  });
+  
+
+
+
+
+  // LOADER TRANSITION HOME
+document.addEventListener("DOMContentLoaded", function () {
+  // Delay page load transition by 1.12s
+  setTimeout(() => {
+    let tl = gsap.timeline();
+    tl.to(".transition-column", { yPercent: -100, stagger: 0.1 });
+    tl.set(".transition-wrapper", { display: "none" });
+  }, 1000); // 1.12 seconds = 1120 milliseconds
+
+  // link click
+  $("a:not(.excluded-class)").on("click", function (e) {
+    let currentUrl = $(this).attr("href");
+    if (
+      $(this).prop("hostname") === window.location.host &&
+      !currentUrl.includes("#") &&
+      $(this).attr("target") !== "_blank"
+    ) {
+      e.preventDefault();
+      let tl = gsap.timeline({
+        onComplete: () => (window.location.href = currentUrl)
+      });
+      tl.set(".transition-wrapper", { display: "flex" });
+      tl.fromTo(".transition-column", { yPercent: 100 }, { yPercent: 0, stagger: 0.1 });
+    }
+  });
+
+  // On Back Button Tap
+  window.onpageshow = function (event) {
+    if (event.persisted) window.location.reload();
+  };
+});
   
   
