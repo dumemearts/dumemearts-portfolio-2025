@@ -33,7 +33,7 @@ function initButtonCharacterStagger() {
 
 
 
- // SPLIT TEXT
+  // SPLIT TEXT
   document.querySelectorAll('[data-split="lines"]').forEach((el) => {
 	const split = new SplitText(el, {
 	  type: "lines",
@@ -92,10 +92,10 @@ function initButtonCharacterStagger() {
   
   
   
-
-
   
   // EXPERTISE CARDS
+	gsap.registerPlugin(ScrollTrigger, CustomEase);
+  
 	window.addEventListener("DOMContentLoaded", () => {
 	  const root = document.querySelector('.mwg_effect018');
 	  const pinHeight = root.querySelector('.pin-height');
@@ -163,7 +163,7 @@ function initButtonCharacterStagger() {
 		stagger: 0.12,
 		ease: 'power3.in'
 	  }, 'step+=0.5');
- });
+	});
   
   
   
@@ -177,7 +177,7 @@ function initButtonCharacterStagger() {
   
   
   
- // PARAGRAPH FADE SPLIT TEXT 
+  // PARAGRAPH SPLIT TEXT 
   const splitTypes = document.querySelectorAll('.scroll-highlight');
   splitTypes.forEach((char,i) => {
 	const text = new SplitType(char, {types: ['chars','words']});
@@ -194,14 +194,9 @@ function initButtonCharacterStagger() {
   });
   
   
-
-
-
-
-
   
   
- // TR PROJECT SCROLL ANIMATION
+  // TR PROJECT SCROLL ANIMATION
   $("[tr-scroll-toggle='component']").each(function (index) {
 	// get elements
 	let component = $(this);
@@ -322,17 +317,15 @@ function initButtonCharacterStagger() {
 		});
 	  };
 	});
- });
+  });
   
   
   
   
   
-
-
   
   
- // HOVER EXPERTISE SECTION
+  // HOVER EXPERTISE SECTION
   CustomEase.create("osmo-ease", "0.625, 0.05, 0, 1");
   gsap.defaults({
 	ease: "osmo-ease",
@@ -349,17 +342,15 @@ function initButtonCharacterStagger() {
 		gsap.set(imageItems[i], { autoAlpha: 1 }); // Show image with matching index
 	  });
 	});
- });
-  
-  
-  
-
-
+  });
   
   
   
   
- // PROJECT SPLIT-TEXT ANIMATION
+  
+  
+  
+  // PROJECT SPLIT-TEXT ANIMATION
   let windowWidth = window.outerWidth;
   $(".split-text").each(function (index) {
 	let myText = $(this);
@@ -381,6 +372,7 @@ function initButtonCharacterStagger() {
 	  windowWidth = window.outerWidth;
 	});
   });
+  gsap.registerPlugin(ScrollTrigger);
   function createTextAnimations() {
 	// Line Animation
 	$(".line-animation").each(function (index) {
@@ -463,8 +455,8 @@ function initButtonCharacterStagger() {
 		}
 	  });
 	});
- }
- createTextAnimations();
+  }
+  createTextAnimations();
   
   
   
@@ -475,7 +467,7 @@ function initButtonCharacterStagger() {
   
   
   
- window.addEventListener("DOMContentLoaded", (event) => {
+  window.addEventListener("DOMContentLoaded", (event) => {
 	  $(".hover-component").each(function () {
 		let componentEl = $(this),
 		  triggerEl = componentEl.find(".hover-item"),
@@ -485,7 +477,7 @@ function initButtonCharacterStagger() {
 		  targetEl.css("transform", `translateY(${triggerIndex * -100}%)`);
 		});
 	  });
- });
+  });
   
   
   
@@ -494,7 +486,7 @@ function initButtonCharacterStagger() {
   
   
   
- // TESTIMONIAL SLIDER
+  // TESTIMONIAL SLIDER
   let photoSwiper = new Swiper(".swiper.is-photos", {
 	effect: "cards",
 	grabCursor: true,
@@ -514,15 +506,15 @@ function initButtonCharacterStagger() {
 	fadeEffect: {
 	  crossFade: true
 	}
- });
- photoSwiper.controller.control = contentSwiper;
- contentSwiper.controller.control = photoSwiper;
+  });
+  photoSwiper.controller.control = contentSwiper;
+  contentSwiper.controller.control = photoSwiper;
   
   
   
   
   
- // FOOTER CONTACT ME TEXT STAGGER
+  // FOOTER CONTACT ME TEXT STAGGER
   gsap.from(".heading-style-display,.heading-style-display.is-subtract,.heading-style-display.is--next", {
 	y: 100,
 	opacity: 0,
@@ -535,16 +527,12 @@ function initButtonCharacterStagger() {
 	  toggleActions: "restart pause resume pause",
 	  once: false,
 	},
- });
+  });
   
   
   
   
-
-
-
-
- // FOOTER TICKER ANIMATION
+  // FOOTER TICKER ANIMATION
   document.addEventListener("DOMContentLoaded", function () {
 	gsap.registerPlugin();
   
@@ -567,7 +555,7 @@ function initButtonCharacterStagger() {
 	ticker.addEventListener("mouseleave", function () {
 	  tickerAnimation.resume();
 	});
- });
+  });
   
   
   
@@ -577,7 +565,7 @@ function initButtonCharacterStagger() {
 
 
   
- // EXPERTISE HOVER
+  // EXPERTISE HOVER
   document.addEventListener("DOMContentLoaded", function () {
 	// Only run this script on desktop
 	if (window.innerWidth > 991) {
@@ -604,46 +592,42 @@ function initButtonCharacterStagger() {
 		});
 	  });
 	}
- });
-
-
-
-
-
-
- // LOADER TRANSITION HOME
-document.addEventListener("DOMContentLoaded", function () {
-	// Delay page load transition by 1.12s
-	setTimeout(() => {
-	  let tl = gsap.timeline();
-	  tl.to(".transition-column", { yPercent: -100, stagger: 0.1 });
-	  tl.set(".transition-wrapper", { display: "none" });
-	}, 1000); // 1.12 seconds = 1120 milliseconds
-  
-	// link click
-	$("a:not(.excluded-class)").on("click", function (e) {
-	  let currentUrl = $(this).attr("href");
-	  if (
-		$(this).prop("hostname") === window.location.host &&
-		!currentUrl.includes("#") &&
-		$(this).attr("target") !== "_blank"
-	  ) {
-		e.preventDefault();
-		let tl = gsap.timeline({
-		  onComplete: () => (window.location.href = currentUrl)
-		});
-		tl.set(".transition-wrapper", { display: "flex" });
-		tl.fromTo(".transition-column", { yPercent: 100 }, { yPercent: 0, stagger: 0.1 });
-	  }
-	});
-  
-	// On Back Button Tap
-	window.onpageshow = function (event) {
-	  if (event.persisted) window.location.reload();
-	};
   });
-	
-  
   
 
+
+
+
+  // LOADER TRANSITION HOME
+document.addEventListener("DOMContentLoaded", function () {
+  // Delay page load transition by 1.12s
+  setTimeout(() => {
+    let tl = gsap.timeline();
+    tl.to(".transition-column", { yPercent: -100, stagger: 0.1 });
+    tl.set(".transition-wrapper", { display: "none" });
+  }, 1000); // 1.12 seconds = 1120 milliseconds
+
+  // link click
+  $("a:not(.excluded-class)").on("click", function (e) {
+    let currentUrl = $(this).attr("href");
+    if (
+      $(this).prop("hostname") === window.location.host &&
+      !currentUrl.includes("#") &&
+      $(this).attr("target") !== "_blank"
+    ) {
+      e.preventDefault();
+      let tl = gsap.timeline({
+        onComplete: () => (window.location.href = currentUrl)
+      });
+      tl.set(".transition-wrapper", { display: "flex" });
+      tl.fromTo(".transition-column", { yPercent: 100 }, { yPercent: 0, stagger: 0.1 });
+    }
+  });
+
+  // On Back Button Tap
+  window.onpageshow = function (event) {
+    if (event.persisted) window.location.reload();
+  };
+});
+  
   
