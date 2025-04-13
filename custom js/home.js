@@ -25,7 +25,7 @@ function initButtonCharacterStagger() {
   // Initialize Button Character Stagger Animation
   document.addEventListener('DOMContentLoaded', () => {
 	initButtonCharacterStagger();
-});
+  });
   
   
 
@@ -33,7 +33,7 @@ function initButtonCharacterStagger() {
 
 
 
-// SPLIT TEXT
+ // SPLIT TEXT
   document.querySelectorAll('[data-split="lines"]').forEach((el) => {
 	const split = new SplitText(el, {
 	  type: "lines",
@@ -85,7 +85,7 @@ function initButtonCharacterStagger() {
 	  stagger: 0.02,
 	  duration: 1
 	});
-});
+  });
 
   
   
@@ -95,9 +95,7 @@ function initButtonCharacterStagger() {
 
 
   
-// EXPERTISE CARDS
-	gsap.registerPlugin(ScrollTrigger, CustomEase);
-  
+  // EXPERTISE CARDS
 	window.addEventListener("DOMContentLoaded", () => {
 	  const root = document.querySelector('.mwg_effect018');
 	  const pinHeight = root.querySelector('.pin-height');
@@ -165,7 +163,7 @@ function initButtonCharacterStagger() {
 		stagger: 0.12,
 		ease: 'power3.in'
 	  }, 'step+=0.5');
-});
+ });
   
   
   
@@ -179,7 +177,7 @@ function initButtonCharacterStagger() {
   
   
   
-// PARAGRAPH FADE SPLIT TEXT 
+ // PARAGRAPH FADE SPLIT TEXT 
   const splitTypes = document.querySelectorAll('.scroll-highlight');
   splitTypes.forEach((char,i) => {
 	const text = new SplitType(char, {types: ['chars','words']});
@@ -193,7 +191,7 @@ function initButtonCharacterStagger() {
 	  opacity: 0.2,
 	  stagger: 0.1,
 	})
-});
+  });
   
   
 
@@ -203,7 +201,7 @@ function initButtonCharacterStagger() {
 
   
   
-// TR PROJECT SCROLL ANIMATION
+ // TR PROJECT SCROLL ANIMATION
   $("[tr-scroll-toggle='component']").each(function (index) {
 	// get elements
 	let component = $(this);
@@ -324,7 +322,7 @@ function initButtonCharacterStagger() {
 		});
 	  };
 	});
-});
+ });
   
   
   
@@ -334,7 +332,7 @@ function initButtonCharacterStagger() {
 
   
   
-// HOVER EXPERTISE SECTION
+ // HOVER EXPERTISE SECTION
   CustomEase.create("osmo-ease", "0.625, 0.05, 0, 1");
   gsap.defaults({
 	ease: "osmo-ease",
@@ -351,7 +349,7 @@ function initButtonCharacterStagger() {
 		gsap.set(imageItems[i], { autoAlpha: 1 }); // Show image with matching index
 	  });
 	});
-});
+ });
   
   
   
@@ -361,7 +359,7 @@ function initButtonCharacterStagger() {
   
   
   
-// PROJECT SPLIT-TEXT ANIMATION
+ // PROJECT SPLIT-TEXT ANIMATION
   let windowWidth = window.outerWidth;
   $(".split-text").each(function (index) {
 	let myText = $(this);
@@ -465,8 +463,8 @@ function initButtonCharacterStagger() {
 		}
 	  });
 	});
-}
-createTextAnimations();
+ }
+ createTextAnimations();
   
   
   
@@ -477,7 +475,7 @@ createTextAnimations();
   
   
   
-window.addEventListener("DOMContentLoaded", (event) => {
+ window.addEventListener("DOMContentLoaded", (event) => {
 	  $(".hover-component").each(function () {
 		let componentEl = $(this),
 		  triggerEl = componentEl.find(".hover-item"),
@@ -487,7 +485,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 		  targetEl.css("transform", `translateY(${triggerIndex * -100}%)`);
 		});
 	  });
-});
+ });
   
   
   
@@ -496,7 +494,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
   
   
   
-// TESTIMONIAL SLIDER
+ // TESTIMONIAL SLIDER
   let photoSwiper = new Swiper(".swiper.is-photos", {
 	effect: "cards",
 	grabCursor: true,
@@ -516,15 +514,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
 	fadeEffect: {
 	  crossFade: true
 	}
-});
-photoSwiper.controller.control = contentSwiper;
-contentSwiper.controller.control = photoSwiper;
+ });
+ photoSwiper.controller.control = contentSwiper;
+ contentSwiper.controller.control = photoSwiper;
   
   
   
   
   
-// FOOTER CONTACT ME TEXT STAGGER
+ // FOOTER CONTACT ME TEXT STAGGER
   gsap.from(".heading-style-display,.heading-style-display.is-subtract,.heading-style-display.is--next", {
 	y: 100,
 	opacity: 0,
@@ -537,7 +535,7 @@ contentSwiper.controller.control = photoSwiper;
 	  toggleActions: "restart pause resume pause",
 	  once: false,
 	},
-});
+ });
   
   
   
@@ -546,7 +544,7 @@ contentSwiper.controller.control = photoSwiper;
 
 
 
-// FOOTER TICKER ANIMATION
+ // FOOTER TICKER ANIMATION
   document.addEventListener("DOMContentLoaded", function () {
 	gsap.registerPlugin();
   
@@ -569,7 +567,7 @@ contentSwiper.controller.control = photoSwiper;
 	ticker.addEventListener("mouseleave", function () {
 	  tickerAnimation.resume();
 	});
-});
+ });
   
   
   
@@ -579,7 +577,7 @@ contentSwiper.controller.control = photoSwiper;
 
 
   
-// EXPERTISE HOVER
+ // EXPERTISE HOVER
   document.addEventListener("DOMContentLoaded", function () {
 	// Only run this script on desktop
 	if (window.innerWidth > 991) {
