@@ -609,39 +609,4 @@ contentSwiper.controller.control = photoSwiper;
 });
   
 
-
-
-
-// LOADER TRANSITION HOME
-document.addEventListener("DOMContentLoaded", function () {
-  // Delay page load transition by 1.12s
-  setTimeout(() => {
-    let tl = gsap.timeline();
-    tl.to(".transition-column", { yPercent: -100, stagger: 0.1 });
-    tl.set(".transition-wrapper", { display: "none" });
-  }, 1000); // 1.12 seconds = 1120 milliseconds
-
-  // link click
-  $("a:not(.excluded-class)").on("click", function (e) {
-    let currentUrl = $(this).attr("href");
-    if (
-      $(this).prop("hostname") === window.location.host &&
-      !currentUrl.includes("#") &&
-      $(this).attr("target") !== "_blank"
-    ) {
-      e.preventDefault();
-      let tl = gsap.timeline({
-        onComplete: () => (window.location.href = currentUrl)
-      });
-      tl.set(".transition-wrapper", { display: "flex" });
-      tl.fromTo(".transition-column", { yPercent: 100 }, { yPercent: 0, stagger: 0.1 });
-    }
-  });
-
-  // On Back Button Tap
-  window.onpageshow = function (event) {
-    if (event.persisted) window.location.reload();
-  };
-});
-  
   
