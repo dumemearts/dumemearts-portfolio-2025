@@ -1,0 +1,416 @@
+/* WIZARDY CODE */
+body {
+    font-size: 1vw;
+  }
+  
+  /* Max Font Size */
+  @media screen and (min-width: 1680px) {
+    body {
+      font-size: 16px;
+    }
+  }
+  
+  /* Container Max Width */
+  .container {
+    max-width: 1680px;
+  }
+  
+  /* Deactivate styles for screens below 991px */
+  @media screen and (max-width: 990px) {
+    body {
+      font-size: initial; /* Resets to default font size */
+    }
+  
+    .container {
+      max-width: 100%; /* Removes max-width constraint */
+    }
+}
+
+
+
+
+
+
+
+/* NAV LIST HOVER */
+.navbar-link [data-button-animate-chars] {
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .navbar-link [data-button-animate-chars] span {
+    display: inline-block;
+    position: relative;
+    text-shadow: 0px 1.3em currentColor;
+    transform: translateY(0em) rotate(0.001deg);
+    transition: transform 1.5s cubic-bezier(0.5, 0.05, 0, 1);
+  }
+  
+  .navbar-link:hover [data-button-animate-chars] span {
+    transform: translateY(-1.3em) rotate(0.001deg);
+  }
+  
+  /* Background */
+  .navlink-bg {
+    inset: 0;
+    transition: inset 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+  
+  .navbar-link:hover .navlink-bg {
+    inset: 0.125em;
+  }
+
+
+
+
+
+
+
+  /* NEXT PROJECT HOVER */
+  @media screen and (min-width: 992px) {
+    /* Characters */
+    .button-project[data-button-animate-chars] {
+      overflow: hidden;
+      position: relative;
+      display: inline-block;
+    }
+  
+    .button-project [data-button-animate-chars] span {
+      display: inline-block;
+      position: relative;
+      text-shadow: 0px 1.3em currentColor;
+      transform: translateY(0em) rotate(0.001deg);
+      transition: transform 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+    }
+  
+    .button-project:hover [data-button-animate-chars] span {
+      transform: translateY(-1.3em) rotate(0.001deg);
+    }
+  
+    /* Background */
+    .navlink-bg {
+      inset: 0;
+      transition: inset 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+    }
+  
+    .button-project:hover .navlink-bg {
+      inset: 0.125em;
+    }
+}
+
+
+
+
+
+/* EXPERTISE LINK HOVER */
+.main-title-item [data-button-animate-chars] {
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .main-title-item [data-button-animate-chars] span {
+    display: inline-block;
+    position: relative;
+    text-shadow: 0px 1.3em currentColor;
+    transform: translateY(0em) rotate(0.001deg);
+    transition: transform 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+  
+  .main-title-item:hover [data-button-animate-chars] span {
+    transform: translateY(-1.3em) rotate(0.001deg);
+  }
+  
+  /* Background */
+  .navlink-bg {
+    inset: 0;
+    transition: inset 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+  
+  .main-title-item:hover .navlink-bg {
+    inset: 0.125em;
+}
+
+
+
+
+
+
+/* NAVLINK CSS */
+@media screen and (min-width: 992px) {
+    .navbar-links-wrapper {
+      display: flex !important;
+      gap: 15px !important;
+    }
+  
+    .navbar-link {
+      position: relative !important;
+      transition: opacity 0.3s ease, filter 0.3s ease !important;
+    }
+  
+    .navlink-bg {
+      background-color: transparent !important;
+      transition: background-color 0.3s ease !important;
+    }
+  
+    .button-text {
+      transition: color 0.3s ease !important;
+    }
+  
+    /* Hovered navbar-link effect */
+    .navbar-link:hover .navlink-bg {
+      background-color: #000000 !important;
+    }
+  
+    .navbar-link:hover .button-text {
+      color: white !important;
+    }
+  
+    /* Reduce opacity for all links on hover */
+    .navbar-links-wrapper:hover .navbar-link {
+      opacity: 0.25 !important;
+      filter: grayscale(100%) !important;
+    }
+  
+    /* Exclude the hovered item */
+    .navbar-links-wrapper:hover .navbar-link:hover {
+      opacity: 1 !important;
+      filter: grayscale(0%) !important;
+    }
+}
+
+
+
+
+
+
+
+
+/* BUTTON HOVER FAQ CSS */
+
+/* Previous and next Button*/ 
+.button-slider, .button-overlay{ transition: transform 0.475s var(--cubic-default), opacity 0.475s var(--cubic-default)}
+
+.button-slider:hover .button-overlay{ transform: scale(1.4); }
+.overlay-nav-row:hover:has(.button-slider:hover) .button-slider{ opacity: 0.4; }
+.button-slider:hover{ transform: scale(0.85); opacity: 1 !important; }
+
+/* Styling of active slide's caption */
+.slide-caption{ transition: transform 0.525s var(--cubic-default), opacity 0.525s var(--cubic-default); transition-delay:0s; }
+
+html:not(.wf-design-mode) .slide-caption{ opacity: 0; transform:translate(-25%, 0px) }
+html:not(.wf-design-mode) [data-slider="slide"].active .slide-caption{ opacity: 1; transform:translate(0%, 0px) }
+
+/* Styling of active slide */
+html:not(.wf-design-mode) [data-slider="slide"]{ opacity: 0.2; }
+html:not(.wf-design-mode) [data-slider="slide"].active { opacity: 1; } 
+html:not(.wf-design-mode) [data-slider="slide"].active .slide-caption{ transition-delay:0.3s;
+} 
+
+
+
+
+
+
+/* EXPERTISE HOVER CSS */
+.main-title::after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    right: -0.3em;
+    width: 0.75em;
+    height: 0.15em;
+    border-radius: 100em;
+    background: currentColor;
+    opacity: 0;
+    transition: all 0.525s var(--cubic-default);
+    transform: translate(100%, 0%) scale(0);
+  }
+  
+  /* Show underline on hover */
+  .main-title-item:hover .main-title::after {
+    transform: translate(0%, 0%) scale(1.5);
+    opacity: 1;
+    width: 1em;
+    height: 1em;
+}
+
+
+
+
+
+
+/* PARTNER HOVER CSS */
+.grow-card-list:hover .grow-card:not(:hover) {
+    opacity: 0.25 !important;
+    filter: grayscale(100%) !important;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  
+  /* Same forced effect for .grow-card-content inside */
+  .grow-card-list:hover .grow-card:not(:hover) .grow-card-content {
+    opacity: 0.25 !important;
+    filter: grayscale(100%) !important;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  
+  /* === Disable effect on Webflow Tablet (991px and below) === */
+  @media screen and (max-width: 991px) {
+    .grow-card-list:hover .grow-card:not(:hover),
+    .grow-card-list:hover .grow-card:not(:hover) .grow-card-content {
+      opacity: 1 !important;
+      filter: none !important;
+    }
+}
+
+
+
+
+
+
+
+/* TESTIMONIAL CSS */
+:root {
+    --main-dark: black;
+    --main-light: white;
+  }
+  
+  /* Global Styles */
+  ::selection {
+      background: var(--main-dark);
+    color: var(--main-light);
+    text-shadow: none;
+  }
+  img::selection, svg::selection {
+      background: transparent;
+  }
+  
+  /* Link color inherits from parent font color  */
+  a {
+      color: inherit;
+  }
+  
+  /* Project CSS */
+  .swiper-slide.is-photos {
+      display: none;
+  }
+  .swiper-slide.is-photos:first-child {
+      display: block;
+}
+body .swiper-slide.is-photos {
+	display: block !important;
+}
+
+.transition_wrap {
+	display: flex;
+}
+
+
+
+
+
+/* ABOUT IMAGES CSS */
+[data-image-cycle-item="active"] {
+    transition: opacity 0.4s ease 0s, visibility 0s ease 0s;
+    opacity: 1;
+    visibility: visible;
+    z-index: 3;
+  }
+  
+  [data-image-cycle-item="previous"] {
+    transition: opacity 0.4s ease 0.4s, visibility 0s ease 0.4s;
+    opacity: 0;
+    visibility: visible;
+    z-index: 2;
+  }
+  
+  [data-image-cycle-item="not-active"] {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+}
+
+
+
+
+
+
+
+/* PROJECT BIG TEXT CSS */
+  .breaker-text {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: currentColor;
+}
+
+
+
+
+
+/* CERTIFIED CARD CSS */
+.layout-component .layout-card:not(:first-child) {
+    margin-left: -15vw;
+}
+
+
+
+
+
+/* FORM RADIO STYLING CSS */
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+  }
+  
+  /* Add a centered black dot when selected */
+  input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1rem;
+    height: 1rem;
+    background-color: black;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Optional: spacing if you're using adjacent <label> */
+  input[type="radio"] + label {
+    margin-left: 0.5em;
+    font-weight: bold;
+    color: white;
+}
+
+
+
+
+/* SPLIT TEXT CSS */
+h2.split-line-wrap {
+    padding-top: 1vh !important;
+  }
+  
+  .split-line-wrap {
+    display: block;
+    /* padding-top removed from here */
+  }
+  
+  .split-line {
+    display: block;
+    transform-origin: left;
+  }
+  
+  .split-letter {
+    display: inline-block;
+  }
