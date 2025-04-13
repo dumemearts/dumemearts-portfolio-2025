@@ -114,39 +114,7 @@ function initButtonCharacterStagger() {
   
   
   
-  
-  // H2 TEXT STAGGER DESKTOP
-  gsap.registerPlugin(ScrollTrigger);
 
-  document.querySelectorAll('.header-tagline').forEach(tagline => {
-    const heading = tagline.querySelector('.heading-style-h2.is--smaller');
-    if (!heading) return;
-
-    const chars = heading.textContent.trim().split('');
-
-    heading.innerHTML = chars.map(char => {
-      const safeChar = char === ' ' ? '&nbsp;' : char;
-      return `<span class="char">${safeChar}</span>`;
-    }).join('');
-
-    const charSpans = heading.querySelectorAll('.char');
-
-    gsap.fromTo(charSpans,
-      { y: 40, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.05,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: tagline,
-          toggleActions: "play none none none", // play once only
-          once: true
-        }
-      }
-    );
-  });
   
   
   

@@ -30,25 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// H2 TEXT STAGGER DESKTOP
-document.addEventListener("DOMContentLoaded", function () {
-  gsap.utils.toArray(".heading-style-h2").forEach((triggerElement) => {
-    gsap.from(triggerElement.querySelectorAll(".heading-letter-h2"), {
-      opacity: 0,
-      y: 50,
-      duration: 0.6,
-      stagger: 0.05,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: triggerElement, // Triggers when any .heading-style-h2 is in view
-        start: "top 80%", // Start animation when the element is 80% into the viewport
-        once: true, // Only animate once
-      },
-    });
-  });
-});
-
-
 
 
 
