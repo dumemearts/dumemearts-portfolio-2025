@@ -28,14 +28,12 @@ function initButtonCharacterStagger() {
   });
   
   
-
   
   
   
   
   
-  
-  // EXPERTISE CARDS
+  // MGW EXPERTISE CARDS
 	gsap.registerPlugin(ScrollTrigger, CustomEase);
   
 	window.addEventListener("DOMContentLoaded", () => {
@@ -63,7 +61,7 @@ function initButtonCharacterStagger() {
 		end: 'bottom bottom',
 		pin: container,
 		pinSpacing: false,
-		scrub: true
+		scrub: 0.4
 	  });
   
 	  // Set initial card position
@@ -78,7 +76,7 @@ function initButtonCharacterStagger() {
 		  trigger: root,
 		  start: 'top top',
 		  end: 'bottom bottom',
-		  scrub: true
+		  scrub: 0.4
 		}
 	  });
   
@@ -109,12 +107,7 @@ function initButtonCharacterStagger() {
   
   
   
-  
-  
-  
-  
-  
-  
+
 
   
   
@@ -137,6 +130,257 @@ function initButtonCharacterStagger() {
   });
   
   
+
+
+
+
+
+
+
+  // MAIN SPLIT TEXT
+  Webflow.push(function () {
+    setTimeout(() => {
+      if (typeof SplitText === "undefined" || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+        console.error("Missing GSAP or SplitText plugins");
+        return;
+      }
+
+      // ========== LINE SPLIT ==========
+      document.querySelectorAll('[data-split="lines"]').forEach((el) => {
+        const split = new SplitText(el, {
+          type: "lines",
+          linesClass: "split-line"
+        });
+
+        // Wrap each line in a block for better animation control
+        split.lines.forEach((line) => {
+          const wrap = document.createElement("div");
+          wrap.classList.add("split-line-wrap");
+          line.parentNode.insertBefore(wrap, line);
+          wrap.appendChild(line);
+        });
+
+        // Animate lines
+        gsap.from(split.lines, {
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          },
+          yPercent: 100,
+          opacity: 0,
+          ease: "power3.out",
+          stagger: 0.1,
+          duration: 0.6
+        });
+      });
+
+      // ========== LETTER SPLIT ==========
+      document.querySelectorAll('[data-split="letters"]').forEach((el) => {
+        if (el.hasAttribute("split-ran")) return;
+        const split = new SplitText(el, {
+          type: "words,chars",
+          charsClass: "split-letter"
+        });
+        el.setAttribute("split-ran", "true");
+
+        // Animate letters
+        gsap.from(split.chars, {
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          },
+          y: 60,
+          opacity: 0,
+          ease: "power3.out",
+          stagger: 0.02,
+          duration: 0.6
+        });
+      });
+
+    }, 100); // Delay to make sure DOM and Webflow render is done
+  });
+
+
+
+
+
+
+
+
+
+
+  // LOADER TRANSITION HOME
+document.addEventListener("DOMContentLoaded", function () {
+  // Delay page load transition by 1.12s
+  setTimeout(() => {
+    let tl = gsap.timeline();
+    tl.to(".transition-column", { yPercent: -100, stagger: 0.1 });
+    tl.set(".transition-wrapper", { display: "none" });
+  }, 1000); // 1.12 seconds = 1120 milliseconds
+
+  // link click
+  $("a:not(.excluded-class)").on("click", function (e) {
+    let currentUrl = $(this).attr("href");
+    if (
+      $(this).prop("hostname") === window.location.host &&
+      !currentUrl.includes("#") &&
+      $(this).attr("target") !== "_blank"
+    ) {
+      e.preventDefault();
+      let tl = gsap.timeline({
+        onComplete: () => (window.location.href = currentUrl)
+      });
+      tl.set(".transition-wrapper", { display: "flex" });
+      tl.fromTo(".transition-column", { yPercent: 100 }, { yPercent: 0, stagger: 0.1 });
+    }
+  });
+
+  // On Back Button Tap
+  window.onpageshow = function (event) {
+    if (event.persisted) window.location.reload();
+  };
+});
+
+
+
+
+
+
+
+
+
+
+  // SCALING ELEMENT
+function initFlipOnScroll() {
+  let wrapperElements = document.querySelectorAll("[data-flip-element='wrapper']");
+  let targetEl = document.querySelector("[data-flip-element='target']");
+
+  let tl;
+  function flipTimeline() {
+    if (tl) {
+      tl.kill();
+      gsap.set(targetEl, { clearProps: "all" });
+    }
+    
+    // Use the first and last wrapper elements for the scroll trigger.
+    tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: wrapperElements[0],
+        start: "center center",
+        endTrigger: wrapperElements[wrapperElements.length - 1],
+        end: "center center",
+        scrub: 0.4
+      }
+    });
+    
+    // Loop through each wrapper element.
+    wrapperElements.forEach(function(element, index) {
+      let nextIndex = index + 1;
+      if (nextIndex < wrapperElements.length) {
+        let nextWrapperEl = wrapperElements[nextIndex];
+        // Calculate vertical center positions relative to the document.
+        let nextRect = nextWrapperEl.getBoundingClientRect();
+        let thisRect = element.getBoundingClientRect();
+        let nextDistance = nextRect.top + window.pageYOffset + nextWrapperEl.offsetHeight / 2;
+        let thisDistance = thisRect.top + window.pageYOffset + element.offsetHeight / 2;
+        let offset = nextDistance - thisDistance;
+        // Add the Flip.fit tween to the timeline.
+        tl.add(
+          Flip.fit(targetEl, nextWrapperEl, {
+            duration: 3,
+            ease: "none"
+          })
+        );
+      }
+    });
+  }
+
+  flipTimeline();
+
+  let resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      flipTimeline();
+    }, 100);
+  });
+}
+
+// Initialize Scaling Elements on Scroll (GSAP Flip)
+document.addEventListener('DOMContentLoaded', function() {
+  initFlipOnScroll();
+});
+
+
+
+
+
+
+
+
+
+  // MWG CARD SCROLL
+gsap.registerPlugin(ScrollTrigger)
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  // Optional: Lenis smooth scroll setup (can skip if not using)
+  if (typeof Lenis !== "undefined") {
+    const lenis = new Lenis({ autoRaf: true });
+  }
+
+  const container = document.querySelector('.card-container');
+  const cardsContainer = container.querySelector('.cards');
+  const cards = document.querySelectorAll('.scroll-card');
+  const distance = cardsContainer.clientWidth - window.innerWidth;
+
+  // Animate horizontal scroll
+  const scrollTween = gsap.to(cardsContainer, {
+    x: -distance,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: container,
+      pin: true,
+      scrub: true,
+      start: 'top top',
+      end: '+=' + distance
+    }
+  });
+
+  // Animate each card independently
+  cards.forEach(card => {
+    const values = {
+      x: (Math.random() * 20 + 30) * (Math.random() < 0.5 ? 1 : -1),
+      y: (Math.random() * 6 + 10) * (Math.random() < 0.5 ? 1 : -1),
+      rotation: (Math.random() * 10 + 10) * (Math.random() < 0.5 ? 1 : -1)
+    };
+
+    gsap.fromTo(card,
+      {
+        rotation: values.rotation,
+        xPercent: values.x,
+        yPercent: values.y
+      },
+      {
+        rotation: -values.rotation,
+        xPercent: -values.x,
+        yPercent: -values.y,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: card,
+          containerAnimation: scrollTween,
+          start: 'left 120%',
+          end: 'right -20%',
+          scrub: 0.4
+        }
+      }
+    );
+  });
+});
+
+
   
   
   // TR PROJECT SCROLL ANIMATION
@@ -265,7 +509,7 @@ function initButtonCharacterStagger() {
   
   
   
-  
+
   
   
   // HOVER EXPERTISE SECTION
@@ -286,258 +530,6 @@ function initButtonCharacterStagger() {
 	  });
 	});
   });
-  
-  
-  
-  
-  
-  
-  
-  // PROJECT SPLIT-TEXT ANIMATION
-  let windowWidth = window.outerWidth;
-  $(".split-text").each(function (index) {
-	let myText = $(this);
-	let mySplitText;
-	function createSplits() {
-	  mySplitText = new SplitText(myText, {
-		type: "chars,words,lines",
-		charsClass: "split-chars",
-		wordsClass: "split-words",
-		linesClass: "split-lines"
-	  });
-	}
-	createSplits();
-	$(window).resize(function () {
-		if (window.outerWidth !== windowWidth) {
-		  mySplitText.revert();
-			  location.reload();
-	  }
-	  windowWidth = window.outerWidth;
-	});
-  });
-  gsap.registerPlugin(ScrollTrigger);
-  function createTextAnimations() {
-	// Line Animation
-	$(".line-animation").each(function (index) {
-	  let triggerElement = $(this);
-	  let myText = $(this).find(".split-text");
-	  let targetElement = $(this).find(".split-lines");
-  
-	  let tl = gsap.timeline({
-		scrollTrigger: {
-		  trigger: triggerElement,
-		  // trigger element - viewport
-		  start: "top bottom",
-		  end: "bottom top",
-		  toggleActions: "restart none none none"
-		}
-	  });
-	  tl.from(targetElement, {
-		duration: 0.5,
-		y: "150%",
-		rotationX: -90,
-		opacity: 0,
-		ease: "power1.inOut",
-		stagger: {
-		  amount: 0.4,
-		  from: "0"
-		}
-	  });
-	});
-	// Word Animation
-	$(".word-animation").each(function (index) {
-	  let triggerElement = $(this);
-	  let myText = $(this).find(".split-text");
-	  let targetElement = $(this).find(".split-words");
-  
-	  let tl = gsap.timeline({
-		scrollTrigger: {
-		  trigger: triggerElement,
-		  // trigger element - viewport
-		  start: "top bottom",
-		  end: "bottom top",
-		  toggleActions: "restart none none none"
-		}
-	  });
-	  tl.from(targetElement, {
-		duration: 0.3,
-		y: "80%",
-		rotationX: -90,
-		opacity: 0,
-		ease: "power1.inOut",
-		stagger: {
-		  amount: 0.9,
-		  from: "0"
-		}
-	  });
-	});
-	// Letter Animation
-	$(".letter-animation").each(function (index) {
-	  let triggerElement = $(this);
-	  let myText = $(this).find(".split-text");
-	  let targetElement = $(this).find(".split-chars");
-  
-	  let tl = gsap.timeline({
-		scrollTrigger: {
-		  trigger: triggerElement,
-		  // trigger element - viewport
-		  start: "top bottom",
-		  end: "bottom top",
-		  toggleActions: "restart none none none"
-		}
-	  });
-	  tl.from(targetElement, {
-		duration: 0.5,
-		y: "60%",
-		opacity: 0,
-		rotationX: -90,
-		ease: "power1.inOut",
-		stagger: {
-		  amount: 0.7,
-		  from: "0"
-		}
-	  });
-	});
-  }
-  createTextAnimations();
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  window.addEventListener("DOMContentLoaded", (event) => {
-	  $(".hover-component").each(function () {
-		let componentEl = $(this),
-		  triggerEl = componentEl.find(".hover-item"),
-		  targetEl = componentEl.find(".cursor-list");
-		triggerEl.on("mouseenter", function () {
-		  let triggerIndex = $(this).index();
-		  targetEl.css("transform", `translateY(${triggerIndex * -100}%)`);
-		});
-	  });
-  });
-  
-  
-  
-  
-  
-  
-  
-  // PIXEL HOVER ANIMATION
-  document.addEventListener('DOMContentLoaded', function () {
-	const animationStepDuration = 0.3; // Adjust this value to control the timing
-	const gridSize = 7; // Number of pixels per row and column (adjustable)
-  
-	// Calculate pixel size dynamically
-	const pixelSize = 100 / gridSize; // Calculate the size of each pixel as a percentage
-  
-	// Select all cards
-	const cards = document.querySelectorAll('[data-pixelated-image-reveal]');
-  
-	// Detect if device is touch device
-	const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
-  
-	// Loop through each card
-	cards.forEach((card) => {
-	  const pixelGrid = card.querySelector('[data-pixelated-image-reveal-grid]');
-	  const activeCard = card.querySelector('[data-pixelated-image-reveal-active]');
-  
-	  // Remove any existing pixels with the class 'pixelated-image-card__pixel'
-	  const existingPixels = pixelGrid.querySelectorAll('.pixelated-image-card__pixel');
-	  existingPixels.forEach(pixel => pixel.remove());
-  
-	  // Create a grid of pixels dynamically based on the gridSize
-	  for (let row = 0; row < gridSize; row++) {
-		for (let col = 0; col < gridSize; col++) {
-		  const pixel = document.createElement('div');
-		  pixel.classList.add('pixelated-image-card__pixel');
-		  pixel.style.width = `${pixelSize}%`; // Set the pixel width dynamically
-		  pixel.style.height = `${pixelSize}%`; // Set the pixel height dynamically
-		  pixel.style.left = `${col * pixelSize}%`; // Set the pixel's horizontal position
-		  pixel.style.top = `${row * pixelSize}%`; // Set the pixel's vertical position
-		  pixelGrid.appendChild(pixel);
-		}
-	  }
-  
-	  const pixels = pixelGrid.querySelectorAll('.pixelated-image-card__pixel');
-	  const totalPixels = pixels.length;
-	  const staggerDuration = animationStepDuration / totalPixels; // Calculate stagger duration dynamically
-  
-	  let isActive = false; // Variable to track if the card is active
-	  let delayedCall;
-  
-	  const animatePixels = (activate) => {
-		isActive = activate;
-		gsap.killTweensOf(pixels); // Reset any ongoing animations
-		if (delayedCall) {
-		  delayedCall.kill();
-		}
-		gsap.set(pixels, { display: 'none' }); // Make all pixels invisible instantly
-  
-		// Show pixels randomly
-		gsap.to(pixels, {
-		  display: 'block',
-		  duration: 0,
-		  stagger: {
-			each: staggerDuration,
-			from: 'random'
-		  }
-		});
-  
-		// After animationStepDuration, show or hide the activeCard
-		delayedCall = gsap.delayedCall(animationStepDuration, () => {
-		  if (activate) {
-			activeCard.style.display = 'block';
-			// **Set pointer-events to none so clicks pass through activeCard**
-			activeCard.style.pointerEvents = 'none';
-		  } else {
-			activeCard.style.display = 'none';
-		  }
-		});
-  
-		// Hide pixels randomly
-		gsap.to(pixels, {
-		  display: 'none',
-		  duration: 0,
-		  delay: animationStepDuration,
-		  stagger: {
-			each: staggerDuration,
-			from: 'random'
-		  }
-		});
-	  };
-  
-	  if (isTouchDevice) {
-		// For touch devices, use click event
-		card.addEventListener('click', () => {
-		  animatePixels(!isActive);
-		});
-	  } else {
-		// For non-touch devices, use mouseenter and mouseleave
-		card.addEventListener('mouseenter', () => {
-		  if (!isActive) {
-			animatePixels(true);
-		  }
-		});
-  
-		card.addEventListener('mouseleave', () => {
-		  if (isActive) {
-			animatePixels(false);
-		  }
-		});
-	  }
-	});
-  });
-  
-  
-  
-  
-  
   
   
   // TESTIMONIAL SLIDER
@@ -648,40 +640,28 @@ function initButtonCharacterStagger() {
 	}
   });
   
-
-
-
-
-  // LOADER TRANSITION HOME
-document.addEventListener("DOMContentLoaded", function () {
-  // Delay page load transition by 1.12s
-  setTimeout(() => {
-    let tl = gsap.timeline();
-    tl.to(".transition-column", { yPercent: -100, stagger: 0.1 });
-    tl.set(".transition-wrapper", { display: "none" });
-  }, 1000); // 1.12 seconds = 1120 milliseconds
-
-  // link click
-  $("a:not(.excluded-class)").on("click", function (e) {
-    let currentUrl = $(this).attr("href");
-    if (
-      $(this).prop("hostname") === window.location.host &&
-      !currentUrl.includes("#") &&
-      $(this).attr("target") !== "_blank"
-    ) {
-      e.preventDefault();
-      let tl = gsap.timeline({
-        onComplete: () => (window.location.href = currentUrl)
-      });
-      tl.set(".transition-wrapper", { display: "flex" });
-      tl.fromTo(".transition-column", { yPercent: 100 }, { yPercent: 0, stagger: 0.1 });
-    }
-  });
-
-  // On Back Button Tap
-  window.onpageshow = function (event) {
-    if (event.persisted) window.location.reload();
-  };
-});
   
+  
+  
+  
+  
+  
+  
+  window.addEventListener("DOMContentLoaded", (event) => {
+	  $(".hover-component").each(function () {
+		let componentEl = $(this),
+		  triggerEl = componentEl.find(".hover-item"),
+		  targetEl = componentEl.find(".cursor-list");
+		triggerEl.on("mouseenter", function () {
+		  let triggerIndex = $(this).index();
+		  targetEl.css("transform", `translateY(${triggerIndex * -100}%)`);
+		});
+	  });
+  });
+  
+  
+
+  
+  
+
   
