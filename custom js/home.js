@@ -28,6 +28,39 @@ function initButtonCharacterStagger() {
   });
   
   
+
+
+
+// MGW WORD ANIMATION
+  gsap.registerPlugin(ScrollTrigger);
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Hide scroll prompt on scroll
+  gsap.to('.scroll-home', {
+    autoAlpha: 0,
+    duration: 0.5,
+    scrollTrigger: {
+      trigger: document.body,
+      start: 'top top',
+      end: 'top top-=1',
+      toggleActions: "play none reverse none"
+    }
+  });
+
+  // Animate each word
+  document.querySelectorAll('.expertise-wrapper .word').forEach(word => {
+    gsap.to(word.children, {
+      yPercent: '+=100',
+      ease: 'expo.inOut',
+      scrollTrigger: {
+        trigger: word,
+        start: "bottom bottom",
+        end: "top 55%",
+        scrub: 0.7
+      }
+    });
+  });
+});
   
   
   
