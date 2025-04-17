@@ -27,6 +27,25 @@ function initButtonCharacterStagger() {
 	initButtonCharacterStagger();
   });
   
+
+
+
+  // PARAGRAPH SPLIT TEXT 
+const splitTypes = document.querySelectorAll('.scroll-fade');
+splitTypes.forEach((char,i) => {
+  const text = new SplitType(char, {types: ['chars','words']});
+  gsap.from(text.chars, {
+    scrollTrigger: {
+      trigger: char,
+      start: 'top 80%',
+      end: 'top 20%',
+      scrub: true,
+    },
+    opacity: 0.2,
+    stagger: 0.1,
+  })
+});
+
   
 
 
@@ -62,18 +81,91 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
   
+
+
+
+
   
   
+   // OSMO STICKY WRAP 100VH 
+function initStickyTitleScroll() {
+  const wraps = document.querySelectorAll('[data-sticky-title="wrap"]');
   
+  wraps.forEach(wrap => {
+    const headings = Array.from(wrap.querySelectorAll('[data-sticky-title="heading"]'));
+    
+    const masterTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: wrap,
+        start: "top 40%",
+        end: "bottom bottom",
+        scrub: true,
+      }
+    });
+    
+    const revealDuration = 0.7,
+          fadeOutDuration = 0.7,
+          overlapOffset = 0.15;
+    
+    headings.forEach((heading, index) => {
+      // Save original heading content for screen readers
+      heading.setAttribute("aria-label", heading.textContent);
+      
+      const split = new SplitText(heading, { type: "words,chars" });
+      
+      // Hide all the separate words from screenreader
+      split.words.forEach(word => word.setAttribute("aria-hidden", "true"));
+      
+      // Reset visibility on the 'stacked' headings
+      gsap.set(heading, { visibility: "visible" });
+      
+      const headingTl = gsap.timeline();
+      headingTl.from(split.chars, {
+        autoAlpha: 0,
+        stagger: { amount: revealDuration, from: "start" },
+        duration: revealDuration
+      });
+      
+      // Animate fade-out for every heading except the last one.
+      if (index < headings.length - 1) {
+        headingTl.to(split.chars, {
+          autoAlpha: 0,
+          stagger: { amount: fadeOutDuration, from: "end" },
+          duration: fadeOutDuration
+        });
+      }
+      
+      // Overlap the start of fade-in of the new heading a little bit
+      if (index === 0) {
+        masterTl.add(headingTl);
+      } else {
+        masterTl.add(headingTl, `-=${overlapOffset}`);
+      }
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initStickyTitleScroll();
+})
+
+
+
+
+
+
+
+
+
   
   // MGW EXPERTISE CARDS
 	gsap.registerPlugin(ScrollTrigger, CustomEase);
   
 	window.addEventListener("DOMContentLoaded", () => {
-	  const root = document.querySelector('.mwg_effect018');
+	  const root = document.querySelector('.expertise-cards');
 	  const pinHeight = root.querySelector('.pin-height');
-	  const container = root.querySelector('.container');
-	  const cards = root.querySelectorAll('.card');
+	  const container = root.querySelector('.expertise-container');
+	  const cards = root.querySelectorAll('.expertise-card');
   
 	  // Fade out scroll label
 	  gsap.to('.scroll', {
@@ -142,29 +234,94 @@ window.addEventListener("DOMContentLoaded", () => {
   
 
 
-  
-  
-  
-  
-  // PARAGRAPH SPLIT TEXT 
-  const splitTypes = document.querySelectorAll('.scroll-highlight');
-  splitTypes.forEach((char,i) => {
-	const text = new SplitType(char, {types: ['chars','words']});
-	gsap.from(text.chars, {
-	  scrollTrigger: {
-		trigger: char,
-		start: 'top 80%',
-		end: 'top 20%',
-		scrub: true,
-	  },
-	  opacity: 0.2,
-	  stagger: 0.1,
-	})
-  });
-  
-  
 
 
+      // OSMO MARQUEE FEATURED SCROLL DIRECTION
+    function initMarqueeScrollDirection() {
+        document.querySelectorAll('[data-marquee-scroll-direction-target]').forEach((marquee) => {
+          // Query marquee elements
+          const marqueeContent = marquee.querySelector('[data-marquee-collection-target]');
+          const marqueeScroll = marquee.querySelector('[data-marquee-scroll-target]');
+          if (!marqueeContent || !marqueeScroll) return;
+      
+          // Get data attributes
+          const { marqueeSpeed: speed, marqueeDirection: direction, marqueeDuplicate: duplicate, marqueeScrollSpeed: scrollSpeed } = marquee.dataset;
+      
+          // Convert data attributes to usable types
+          const marqueeSpeedAttr = parseFloat(speed);
+          const marqueeDirectionAttr = direction === 'right' ? 1 : -1; // 1 for right, -1 for left
+          const duplicateAmount = parseInt(duplicate || 0);
+          const scrollSpeedAttr = parseFloat(scrollSpeed);
+          const speedMultiplier = window.innerWidth < 479 ? 0.25 : window.innerWidth < 991 ? 0.5 : 1;
+      
+          let marqueeSpeed = marqueeSpeedAttr * (marqueeContent.offsetWidth / window.innerWidth) * speedMultiplier;
+      
+          // Precompute styles for the scroll container
+          marqueeScroll.style.marginLeft = `${scrollSpeedAttr * -1}%`;
+          marqueeScroll.style.width = `${(scrollSpeedAttr * 2) + 100}%`;
+      
+          // Duplicate marquee content
+          if (duplicateAmount > 0) {
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < duplicateAmount; i++) {
+              fragment.appendChild(marqueeContent.cloneNode(true));
+            }
+            marqueeScroll.appendChild(fragment);
+          }
+      
+          // GSAP animation for marquee content
+          const marqueeItems = marquee.querySelectorAll('[data-marquee-collection-target]');
+          const animation = gsap.to(marqueeItems, {
+            xPercent: -100, // Move completely out of view
+            repeat: -1,
+            duration: marqueeSpeed,
+            ease: 'linear'
+          }).totalProgress(0.5);
+      
+          // Initialize marquee in the correct direction
+          gsap.set(marqueeItems, { xPercent: marqueeDirectionAttr === 1 ? 100 : -100 });
+          animation.timeScale(marqueeDirectionAttr); // Set correct direction
+          animation.play(); // Start animation immediately
+      
+          // Set initial marquee status
+          marquee.setAttribute('data-marquee-status', 'normal');
+      
+          // ScrollTrigger logic for direction inversion
+          ScrollTrigger.create({
+            trigger: marquee,
+            start: 'top bottom',
+            end: 'bottom top',
+            onUpdate: (self) => {
+              const isInverted = self.direction === 1; // Scrolling down
+              const currentDirection = isInverted ? -marqueeDirectionAttr : marqueeDirectionAttr;
+      
+              // Update animation direction and marquee status
+              animation.timeScale(currentDirection);
+              marquee.setAttribute('data-marquee-status', isInverted ? 'normal' : 'inverted');
+            }
+          });
+      
+          // Extra speed effect on scroll
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: marquee,
+              start: '0% 100%',
+              end: '100% 0%',
+              scrub: 0
+            }
+          });
+      
+          const scrollStart = marqueeDirectionAttr === -1 ? scrollSpeedAttr : -scrollSpeedAttr;
+          const scrollEnd = -scrollStart;
+      
+          tl.fromTo(marqueeScroll, { x: `${scrollStart}vw` }, { x: `${scrollEnd}vw`, ease: 'none' });
+        });
+      }
+      
+      // Initialize Marquee with Scroll Direction
+      document.addEventListener('DOMContentLoaded', () => {
+        initMarqueeScrollDirection();
+      });
 
 
 
@@ -414,6 +571,9 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 
+
+
+
   
   
   // TR PROJECT SCROLL ANIMATION
@@ -541,29 +701,12 @@ window.addEventListener("DOMContentLoaded", () => {
   
   
   
-  
 
-  
-  
-  // HOVER EXPERTISE SECTION
-  CustomEase.create("osmo-ease", "0.625, 0.05, 0, 1");
-  gsap.defaults({
-	ease: "osmo-ease",
-	duration: 0.725
-  });
-  document.addEventListener("DOMContentLoaded", () => {
-	const listItems = document.querySelectorAll(".main-title-item");
-	const imageItems = document.querySelectorAll(".main-img-item");
-  
-	// Show corresponding image on hover of a list item, based on index
-	listItems.forEach((listItem, i) => {
-	  listItem.addEventListener("mouseenter", () => {
-		gsap.set(imageItems, { autoAlpha: 0 }); // Hide all images
-		gsap.set(imageItems[i], { autoAlpha: 1 }); // Show image with matching index
-	  });
-	});
-  });
-  
+
+
+
+
+
   
   // TESTIMONIAL SLIDER
   let photoSwiper = new Swiper(".swiper.is-photos", {
@@ -636,61 +779,6 @@ window.addEventListener("DOMContentLoaded", () => {
 	});
   });
   
-  
-  
-
-
-
-
-
-  
-  // EXPERTISE HOVER
-  document.addEventListener("DOMContentLoaded", function () {
-	// Only run this script on desktop
-	if (window.innerWidth > 991) {
-	  const list = document.querySelector('.main-title-list');
-	  const items = document.querySelectorAll('.main-title-item');
-  
-	  if (!list || !items.length) return;
-  
-	  items.forEach(item => {
-		item.addEventListener('mouseenter', () => {
-		  items.forEach(el => {
-			if (el !== item) {
-			  el.style.opacity = '0.25';
-			  el.style.filter = 'grayscale(100%)';
-			}
-		  });
-		});
-  
-		item.addEventListener('mouseleave', () => {
-		  items.forEach(el => {
-			el.style.opacity = '';
-			el.style.filter = '';
-		  });
-		});
-	  });
-	}
-  });
-  
-  
-  
-  
-  
-  
-  
-  
-  window.addEventListener("DOMContentLoaded", (event) => {
-	  $(".hover-component").each(function () {
-		let componentEl = $(this),
-		  triggerEl = componentEl.find(".hover-item"),
-		  targetEl = componentEl.find(".cursor-list");
-		triggerEl.on("mouseenter", function () {
-		  let triggerIndex = $(this).index();
-		  targetEl.css("transform", `translateY(${triggerIndex * -100}%)`);
-		});
-	  });
-  });
   
   
 
