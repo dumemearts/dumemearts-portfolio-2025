@@ -667,49 +667,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"4h0ES":[function(require,module,exports,__globalThis) {
-// NAV MENU ITEMS HOVER STAGGER
-function initButtonCharacterStagger() {
-    const offsetIncrement = 0.05; // Transition offset increment in seconds
-    const buttons = document.querySelectorAll('[data-button-animate-chars]');
-    buttons.forEach((button)=>{
-        const text = button.textContent; // Get the button's text content
-        button.innerHTML = ''; // Clear the original content
-        [
-            ...text
-        ].forEach((char, index)=>{
-            const span = document.createElement('span');
-            span.textContent = char;
-            span.style.transitionDelay = `${index * offsetIncrement}s`;
-            // Handle spaces explicitly
-            if (char === ' ') span.style.whiteSpace = 'pre'; // Preserve space width
-            button.appendChild(span);
-        });
-    });
-}
-// Initialize Button Character Stagger Animation
-document.addEventListener('DOMContentLoaded', ()=>{
-    initButtonCharacterStagger();
-});
-// PARAGRAPH SPLIT TEXT 
-const splitTypes = document.querySelectorAll('.scroll-fade');
-splitTypes.forEach((char, i)=>{
-    const text = new SplitType(char, {
-        types: [
-            'chars',
-            'words'
-        ]
-    });
-    gsap.from(text.chars, {
-        scrollTrigger: {
-            trigger: char,
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: true
-        },
-        opacity: 0.2,
-        stagger: 0.1
-    });
-});
 // MGW WORD ANIMATION
 gsap.registerPlugin(ScrollTrigger);
 window.addEventListener("DOMContentLoaded", ()=>{
@@ -982,8 +939,8 @@ Webflow.push(function() {
                 y: 60,
                 opacity: 0,
                 ease: "power3.out",
-                stagger: 0.02,
-                duration: 0.6
+                stagger: 0.05,
+                duration: 1
             });
         });
     }, 100); // Delay to make sure DOM and Webflow render is done
@@ -1301,40 +1258,6 @@ let contentSwiper = new Swiper(".swiper.is-content", {
 });
 photoSwiper.controller.control = contentSwiper;
 contentSwiper.controller.control = photoSwiper;
-// FOOTER CONTACT ME TEXT STAGGER
-gsap.from(".heading-style-display,.heading-style-display.is-subtract,.heading-style-display.is--next", {
-    y: 100,
-    opacity: 0,
-    duration: 0.4,
-    stagger: 0.05,
-    ease: "power3.out",
-    scrollTrigger: {
-        trigger: ".footer-wrapper",
-        start: "top 75%",
-        toggleActions: "restart pause resume pause",
-        once: false
-    }
-});
-// FOOTER TICKER ANIMATION
-document.addEventListener("DOMContentLoaded", function() {
-    gsap.registerPlugin();
-    let ticker = document.querySelector(".email-ticker-wrapper");
-    if (!ticker) return;
-    let tickerAnimation = gsap.to(ticker, {
-        x: "-50%",
-        duration: 20,
-        ease: "linear",
-        repeat: -1
-    });
-    // Pause on hover
-    ticker.addEventListener("mouseenter", function() {
-        tickerAnimation.pause();
-    });
-    // Resume on hover out
-    ticker.addEventListener("mouseleave", function() {
-        tickerAnimation.resume();
-    });
-});
 
 },{}]},["9Ehlx","4h0ES"], "4h0ES", "parcelRequiref038", {})
 
