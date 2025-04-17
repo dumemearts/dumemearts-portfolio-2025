@@ -83,6 +83,51 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 
+// MWG SPIRAL CARDS 
+window.addEventListener("DOMContentLoaded", () => {
+  // OPTIONAL: Lenis Smooth Scroll
+  const lenis = new Lenis({ autoRaf: true });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // Hide scroll label on scroll start
+  gsap.to('.scroll', {
+    autoAlpha: 0,
+    duration: 0.2,
+    scrollTrigger: {
+      trigger: '.mwg_effect048',
+      start: 'top top',
+      end: 'top top-=1',
+      toggleActions: "play none reverse none"
+    }
+  });
+
+  // 3D Y rotation on scroll for each media element
+  const medias = document.querySelectorAll('.mwg_effect048 .about-media');
+  medias.forEach(media => {
+    gsap.to(media, {
+      rotationY: 360,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: media,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0.4
+      }
+    });
+  });
+});
+
+
+
+
+
+
+
 
 // OSMO LOOPING WORDS
 document.addEventListener('DOMContentLoaded', function() {
@@ -132,98 +177,5 @@ document.addEventListener('DOMContentLoaded', function() {
     .call(moveWords)
     .to({}, { duration: 2 })
     .repeat(-1);
-});
-
-
-
-
-
-// MWG SPIRAL CARDS 
-  window.addEventListener("DOMContentLoaded", () => {
-    // OPTIONAL: Lenis Smooth Scroll
-    const lenis = new Lenis({ autoRaf: true });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    // Hide scroll label on scroll start
-    gsap.to('.scroll', {
-      autoAlpha: 0,
-      duration: 0.2,
-      scrollTrigger: {
-        trigger: '.mwg_effect048',
-        start: 'top top',
-        end: 'top top-=1',
-        toggleActions: "play none reverse none"
-      }
-    });
-
-    // 3D Y rotation on scroll for each media element
-    const medias = document.querySelectorAll('.mwg_effect048 .about-media');
-    medias.forEach(media => {
-      gsap.to(media, {
-        rotationY: 360,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: media,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.4
-        }
-      });
-    });
-  });
-
-
-
-
-
-
-// PARAGRAPH SPLIT TEXT 
-const splitTypes = document.querySelectorAll('.scroll-highlight');
-splitTypes.forEach((char,i) => {
-  const text = new SplitType(char, {types: ['chars','words']});
-  gsap.from(text.chars, {
-    scrollTrigger: {
-      trigger: char,
-      start: 'top 80%',
-      end: 'top 20%',
-      scrub: true,
-    },
-    opacity: 0.2,
-    stagger: 0.1,
-  })
-});
-
-
-
-
-
-// FOOTER TICKER ANIMATION
-document.addEventListener("DOMContentLoaded", function () {
-  gsap.registerPlugin();
-
-  let ticker = document.querySelector(".email-ticker-wrapper");
-  if (!ticker) return;
-
-  let tickerAnimation = gsap.to(ticker, {
-    x: "-50%", // Moves by half since content is duplicated
-    duration: 20, // Adjust speed as needed
-    ease: "linear", // Keeps constant speed
-    repeat: -1, // Infinite loop
-  });
-
-  // Pause on hover
-  ticker.addEventListener("mouseenter", function () {
-    tickerAnimation.pause();
-  });
-
-  // Resume on hover out
-  ticker.addEventListener("mouseleave", function () {
-    tickerAnimation.resume();
-  });
 });
 

@@ -733,7 +733,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
                 trigger: word,
                 start: "bottom bottom",
                 end: "top 55%",
-                scrub: 0.7
+                scrub: 3
             }
         });
     });
