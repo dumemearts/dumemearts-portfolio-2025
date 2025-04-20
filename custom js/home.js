@@ -227,74 +227,77 @@ window.addEventListener("DOMContentLoaded", () => {
   
 	
 	// MGW EXPERTISE CARDS
-	  window.addEventListener("DOMContentLoaded", () => {
-		const root = document.querySelector('.expertise-cards');
-		const pinHeight = root.querySelector('.pin-height');
-		const container = root.querySelector('.expertise-container');
-		const cards = root.querySelectorAll('.expertise-card');
-	
-		// Fade out scroll label
-		gsap.to('.scroll', {
-		  autoAlpha: 0,
-		  duration: 0.2,
-		  scrollTrigger: {
-			trigger: root,
-			start: 'top top',
-			end: 'top top-=1',
-			toggleActions: "play none reverse none"
-		  }
-		});
-	
-		// Pin container during scroll
-		ScrollTrigger.create({
-		  trigger: pinHeight,
-		  start: 'top top',
-		  end: 'bottom bottom',
-		  pin: container,
-		  pinSpacing: false,
-		  scrub: 0.4
-		});
-	
-		// Set initial card position
-		gsap.set(cards, {
-		  yPercent: 50,
-		  y: 0.5 * window.innerHeight
-		});
-	
-		// Animate cards
-		const tl = gsap.timeline({
-		  scrollTrigger: {
-			trigger: root,
-			start: 'top top',
-			end: 'bottom bottom',
-			scrub: 0.4
-		  }
-		});
-	
-		CustomEase.create("custom", "M0,0 C0,0 0.098,0.613 0.5,0.5 0.899,0.386 1,1 1,1 ");
-	
-		tl.to(cards, {
-		  yPercent: -50,
-		  y: -0.5 * window.innerHeight,
-		  duration: 1,
-		  stagger: 0.12,
-		  ease: "custom"
-		}, 'step');
-	
-		tl.to(cards, {
-		  rotation: () => (Math.random() - 0.5) * 20,
-		  duration: 0.5,
-		  stagger: 0.12,
-		  ease: 'power3.out'
-		}, 'step');
-	
-		tl.to(cards, {
-		  rotation: 0,
-		  duration: 0.5,
-		  stagger: 0.12,
-		  ease: 'power3.in'
-		}, 'step+=0.5');
-	  });
+window.addEventListener("DOMContentLoaded", () => {
+	// ❌ Exit if on tablet or below
+	if (window.innerWidth <= 991) return;
+  
+	const root = document.querySelector('.expertise-cards');
+	const pinHeight = root.querySelector('.pin-height');
+	const container = root.querySelector('.expertise-container');
+	const cards = root.querySelectorAll('.expertise-card');
+  
+	// Fade out scroll label
+	gsap.to('.scroll', {
+	  autoAlpha: 0,
+	  duration: 0.2,
+	  scrollTrigger: {
+		trigger: root,
+		start: 'top top',
+		end: 'top top-=1',
+		toggleActions: "play none reverse none"
+	  }
+	});
+  
+	// Pin container during scroll
+	ScrollTrigger.create({
+	  trigger: pinHeight,
+	  start: 'top top',
+	  end: 'bottom bottom',
+	  pin: container,
+	  pinSpacing: false,
+	  scrub: 0.4
+	});
+  
+	// Set initial card position
+	gsap.set(cards, {
+	  yPercent: 50,
+	  y: 0.5 * window.innerHeight
+	});
+  
+	// Animate cards
+	const tl = gsap.timeline({
+	  scrollTrigger: {
+		trigger: root,
+		start: 'top top',
+		end: 'bottom bottom',
+		scrub: 0.4
+	  }
+	});
+  
+	CustomEase.create("custom", "M0,0 C0,0 0.098,0.613 0.5,0.5 0.899,0.386 1,1 1,1 ");
+  
+	tl.to(cards, {
+	  yPercent: -50,
+	  y: -0.5 * window.innerHeight,
+	  duration: 1,
+	  stagger: 0.12,
+	  ease: "custom"
+	}, 'step');
+  
+	tl.to(cards, {
+	  rotation: () => (Math.random() - 0.5) * 20,
+	  duration: 0.5,
+	  stagger: 0.12,
+	  ease: 'power3.out'
+	}, 'step');
+  
+	tl.to(cards, {
+	  rotation: 0,
+	  duration: 0.5,
+	  stagger: 0.12,
+	  ease: 'power3.in'
+	}, 'step+=0.5');
+  });
 	
 	
 	
