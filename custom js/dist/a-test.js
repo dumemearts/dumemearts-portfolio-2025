@@ -737,6 +737,35 @@ window.onload = function() {
         });
     }
 };
+// HERO TEXT STAGGER DESKTOP
+document.addEventListener("DOMContentLoaded", function() {
+    function initGSAPAnimation() {
+        let isTabletOrBelow = window.innerWidth <= 991;
+        gsap.from(".heading-letter-h1, .heading-letter-h1.is--space", {
+            y: 100,
+            opacity: 0,
+            duration: 1.5,
+            stagger: 0.05,
+            ease: "power3.out",
+            delay: 1,
+            scrollTrigger: {
+                trigger: ".layout-inner.IS--ABOUT",
+                start: "top 80%",
+                end: "bottom 20%",
+                toggleActions: isTabletOrBelow ? "play none none none" : "none none none none",
+                onEnter: isTabletOrBelow ? null : (self)=>setTimeout(()=>self.animation.restart(), 500),
+                onEnterBack: isTabletOrBelow ? null : (self)=>setTimeout(()=>self.animation.restart(), 500),
+                once: isTabletOrBelow
+            }
+        });
+    }
+    initGSAPAnimation(); // Run animation check on page load
+    // Listen for window resize to dynamically reinitialize animation
+    window.addEventListener("resize", function() {
+        gsap.killTweensOf(".heading-letter, .heading-letter.is--space"); // Kill animation on resize
+        initGSAPAnimation(); // Reinitialize animation
+    });
+});
 // OSMO MARQUEE FEATURED SCROLL DIRECTION
 function initMarqueeScrollDirection() {
     document.querySelectorAll('[data-marquee-scroll-direction-target]').forEach((marquee)=>{
@@ -871,6 +900,57 @@ Webflow.push(function() {
             });
         });
     }, 100); // Delay to make sure DOM and Webflow render is done
+});
+// TESTIMONIAL SLIDER
+let photoSwiper = new Swiper(".swiper.is-photos", {
+    effect: "cards",
+    grabCursor: true,
+    loop: true,
+    keyboard: true,
+    // Navigation arrows
+    navigation: {
+        nextEl: ".arrow.is-right",
+        prevEl: ".arrow.is-left"
+    }
+});
+let contentSwiper = new Swiper(".swiper.is-content", {
+    speed: 0,
+    loop: true,
+    followFinger: false,
+    effect: 'fade',
+    fadeEffect: {
+        crossFade: true
+    }
+});
+photoSwiper.controller.control = contentSwiper;
+contentSwiper.controller.control = photoSwiper;
+// SCROLL HIGHLIGHT
+window.addEventListener("DOMContentLoaded", ()=>{
+    if (typeof SplitText === "undefined") {
+        console.error("SplitText plugin not loaded.");
+        return;
+    }
+    const split = new SplitText(".slider-text-large", {
+        type: "lines, chars",
+        linesClass: "split-line"
+    });
+    gsap.fromTo(split.chars, {
+        opacity: 0.2
+    }, {
+        opacity: 1,
+        ease: "power2.out",
+        duration: 1,
+        stagger: {
+            each: 0.1,
+            from: "start"
+        },
+        scrollTrigger: {
+            trigger: ".slider-text-large",
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: 1 // Slows scroll sync
+        }
+    });
 });
 // MWG SPIRAL CARDS 
 window.addEventListener("DOMContentLoaded", ()=>{

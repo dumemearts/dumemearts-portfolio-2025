@@ -1,9 +1,11 @@
 // MWG CERTIFIED CARDS
-window.addEventListener("DOMContentLoaded", () => {
+window.onload = function () {
   // ✅ Only run animation on desktop (greater than 991px)
   if (window.innerWidth <= 991) return;
 
   const container = document.querySelector('.layout-component .layout-container');
+  if (!container) return;
+
   const containerW = container.clientWidth;
   const cards = document.querySelectorAll('.layout-card');
   const cardsLength = cards.length;
@@ -78,7 +80,48 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-});
+};
+
+
+
+
+// HERO TEXT STAGGER DESKTOP
+document.addEventListener("DOMContentLoaded", function () {
+  function initGSAPAnimation() {
+    let isTabletOrBelow = window.innerWidth <= 991;
+  
+    gsap.from(".heading-letter-h1, .heading-letter-h1.is--space", {
+    y: 100,
+    opacity: 0,
+    duration: 1.5,
+    stagger: 0.05,
+    ease: "power3.out",
+    delay: 1,
+    scrollTrigger: {
+      trigger: ".layout-inner.IS--ABOUT",
+      start: "top 80%",
+      end: "bottom 20%",
+      toggleActions: isTabletOrBelow ? "play none none none" : "none none none none", 
+      onEnter: isTabletOrBelow
+      ? null
+      : (self) => setTimeout(() => self.animation.restart(), 500),
+      onEnterBack: isTabletOrBelow
+      ? null
+      : (self) => setTimeout(() => self.animation.restart(), 500),
+      once: isTabletOrBelow, // Ensures it only plays once on tablet and below
+    },
+    });
+  }
+  
+  initGSAPAnimation(); // Run animation check on page load
+  
+  // Listen for window resize to dynamically reinitialize animation
+  window.addEventListener("resize", function () {
+    gsap.killTweensOf(".heading-letter, .heading-letter.is--space"); // Kill animation on resize
+    initGSAPAnimation(); // Reinitialize animation
+  });
+  });
+
 
 
 
@@ -172,7 +215,140 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+	// MAIN SPLIT TEXT
+	Webflow.push(function () {
+	  setTimeout(() => {
+		if (typeof SplitText === "undefined" || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+		  console.error("Missing GSAP or SplitText plugins");
+		  return;
+		}
   
+		// ========== LINE SPLIT ==========
+		document.querySelectorAll('[data-split="lines"]').forEach((el) => {
+		  const split = new SplitText(el, {
+			type: "lines",
+			linesClass: "split-line"
+		  });
+  
+		  // Wrap each line in a block for better animation control
+		  split.lines.forEach((line) => {
+			const wrap = document.createElement("div");
+			wrap.classList.add("split-line-wrap");
+			line.parentNode.insertBefore(wrap, line);
+			wrap.appendChild(line);
+		  });
+  
+		  // Animate lines
+		  gsap.from(split.lines, {
+			scrollTrigger: {
+			  trigger: el,
+			  start: "top 85%",
+			  toggleActions: "play none none none"
+			},
+			yPercent: 100,
+			opacity: 0,
+			ease: "power3.out",
+			stagger: 0.1,
+			duration: 0.6
+		  });
+		});
+  
+		// ========== LETTER SPLIT ==========
+		document.querySelectorAll('[data-split="letters"]').forEach((el) => {
+		  if (el.hasAttribute("split-ran")) return;
+		  const split = new SplitText(el, {
+			type: "words,chars",
+			charsClass: "split-letter"
+		  });
+		  el.setAttribute("split-ran", "true");
+  
+		  // Animate letters
+		  gsap.from(split.chars, {
+			scrollTrigger: {
+			  trigger: el,
+			  start: "top 85%",
+			  toggleActions: "play none none none"
+			},
+			y: 60,
+			opacity: 0,
+			ease: "power3.out",
+			stagger: 0.05,
+			duration: 1
+		  });
+		});
+  
+	  }, 100); // Delay to make sure DOM and Webflow render is done
+	});
+  
+
+
+
+  	// TESTIMONIAL SLIDER
+	let photoSwiper = new Swiper(".swiper.is-photos", {
+	  effect: "cards",
+	  grabCursor: true,
+	  loop: true,
+	  keyboard: true,
+	  // Navigation arrows
+	  navigation: {
+		nextEl: ".arrow.is-right",
+		prevEl: ".arrow.is-left"
+	  }
+	});
+	let contentSwiper = new Swiper(".swiper.is-content", {
+	  speed: 0,
+	  loop: true,
+	  followFinger: false,
+	  effect: 'fade',
+	  fadeEffect: {
+		crossFade: true
+	  }
+	});
+	photoSwiper.controller.control = contentSwiper;
+	contentSwiper.controller.control = photoSwiper;
+	
+	
+
+
+  // SCROLL HIGHLIGHT
+  window.addEventListener("DOMContentLoaded", () => {
+	  if (typeof SplitText === "undefined") {
+		console.error("SplitText plugin not loaded.");
+		return;
+	  }
+	
+	  const split = new SplitText(".slider-text-large", {
+		type: "lines, chars",
+		linesClass: "split-line"
+	  });
+	
+	  gsap.fromTo(
+		split.chars,
+		{
+		  opacity: 0.2
+		},
+		{
+		  opacity: 1,
+		  ease: "power2.out",
+		  duration: 1,
+		  stagger: {
+			each: 0.1,
+			from: "start"
+		  },
+		  scrollTrigger: {
+			trigger: ".slider-text-large",
+			start: "top 80%",
+			end: "bottom 20%",
+			scrub: 1 // Slows scroll sync
+		  }
+		}
+	  );
+	});
+  
+
+
+
 
 
 // MWG SPIRAL CARDS 
@@ -191,7 +367,7 @@ window.addEventListener("DOMContentLoaded", () => {
     autoAlpha: 0,
     duration: 0.2,
     scrollTrigger: {
-      trigger: '.mwg_effect048',
+      trigger: '.spiral-cards',
       start: 'top top',
       end: 'top top-=1',
       toggleActions: "play none reverse none"
@@ -199,7 +375,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // 3D Y rotation on scroll for each media element
-  const medias = document.querySelectorAll('.mwg_effect048 .about-media');
+  const medias = document.querySelectorAll('.spiral-cards .about-media');
   medias.forEach(media => {
     gsap.to(media, {
       rotationY: 360,
@@ -213,9 +389,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
-
-
 
 
 
