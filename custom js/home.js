@@ -228,13 +228,17 @@ window.addEventListener("DOMContentLoaded", () => {
 	
 	// MGW EXPERTISE CARDS
 window.addEventListener("DOMContentLoaded", () => {
-	// ❌ Exit if on tablet or below
-	if (window.innerWidth <= 991) return;
-  
 	const root = document.querySelector('.expertise-cards');
 	const pinHeight = root.querySelector('.pin-height');
 	const container = root.querySelector('.expertise-container');
 	const cards = root.querySelectorAll('.expertise-card');
+  
+	// Disable this specific effect on tablet and below
+	const isDesktop = window.innerWidth > 991;
+	if (!isDesktop) {
+	  gsap.set(cards, { clearProps: 'all' });
+	  return;
+	}
   
 	// Fade out scroll label
 	gsap.to('.scroll', {
