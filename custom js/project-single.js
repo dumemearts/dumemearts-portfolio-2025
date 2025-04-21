@@ -1,41 +1,41 @@
 // HERO TEXT STAGGER DESKTOP
-  document.addEventListener("DOMContentLoaded", function () {
-    function initGSAPAnimation() {
-      let isTabletOrBelow = window.innerWidth <= 991;
-    
+document.addEventListener("DOMContentLoaded", function () {
+  function initGSAPAnimation() {
+    let isTabletOrBelow = window.innerWidth <= 991;
+
+    // ✅ Only apply animation if screen is desktop
+    if (!isTabletOrBelow) {
       gsap.from(".heading-letter-h1, .heading-letter-h1.is--space", {
-      y: 100,
-      opacity: 0,
-      duration: 0.4,
-      stagger: 0.05,
-      ease: "power3.out",
-      delay: 1.3,
-      scrollTrigger: {
-        trigger: ".hero-inner",
-        start: "top 80%",
-        end: "bottom 20%",
-        toggleActions: isTabletOrBelow ? "play none none none" : "none none none none", 
-        onEnter: isTabletOrBelow
-        ? null
-        : (self) => setTimeout(() => self.animation.restart(), 500),
-        onEnterBack: isTabletOrBelow
-        ? null
-        : (self) => setTimeout(() => self.animation.restart(), 500),
-        once: isTabletOrBelow, // Ensures it only plays once on tablet and below
-      },
+        y: 100,
+        opacity: 0,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: "power3.out",
+        delay: 1.3,
+        scrollTrigger: {
+          trigger: ".hero-inner",
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none none",
+          once: true
+        }
       });
     }
-    
-    initGSAPAnimation(); // Run animation check on page load
-    
-    // Listen for window resize to dynamically reinitialize animation
-    window.addEventListener("resize", function () {
-      gsap.killTweensOf(".heading-letter, .heading-letter.is--space"); // Kill animation on resize
-      initGSAPAnimation(); // Reinitialize animation
-    });
-    });
+  }
+
+  initGSAPAnimation();
+
+  window.addEventListener("resize", function () {
+    // Kill animation on resize and re-init only for desktop
+    gsap.killTweensOf(".heading-letter, .heading-letter.is--space");
+    initGSAPAnimation();
+  });
+});
   
     
+
+
+
   // OSMO SCALING ELEMENT
   function initFlipOnScroll() {
     let wrapperElements = document.querySelectorAll("[data-flip-element='wrapper']");
