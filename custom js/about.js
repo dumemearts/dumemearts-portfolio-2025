@@ -84,49 +84,6 @@ window.onload = function () {
 
 
 
-
-// HERO TEXT STAGGER DESKTOP
-window.addEventListener("DOMContentLoaded", function() {
-  function initGSAPAnimation() {
-    let isTabletOrBelow = window.innerWidth <= 991;
-  
-    gsap.from(".heading-letter-h1, .heading-letter-h1.is--space", {
-    y: 100,
-    opacity: 0,
-    duration: 1.5,
-    stagger: 0.05,
-    ease: "power3.out",
-    delay: 1,
-    scrollTrigger: {
-      trigger: ".layout-hero",
-      start: "top 80%",
-      end: "bottom 20%",
-      toggleActions: isTabletOrBelow ? "play none none none" : "none none none none", 
-      onEnter: isTabletOrBelow
-      ? null
-      : (self) => setTimeout(() => self.animation.restart(), 500),
-      onEnterBack: isTabletOrBelow
-      ? null
-      : (self) => setTimeout(() => self.animation.restart(), 500),
-      once: isTabletOrBelow, // Ensures it only plays once on tablet and below
-    },
-    });
-  }
-  
-  initGSAPAnimation(); // Run animation check on page load
-  
-  // Listen for window resize to dynamically reinitialize animation
-  window.addEventListener("resize", function () {
-    gsap.killTweensOf(".heading-letter, .heading-letter.is--space"); // Kill animation on resize
-    initGSAPAnimation(); // Reinitialize animation
-  });
-  });
-
-
-
-
-
-
   	// TESTIMONIAL SLIDER
 	let photoSwiper = new Swiper(".swiper.is-photos", {
 	  effect: "cards",
