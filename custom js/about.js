@@ -86,7 +86,7 @@ window.onload = function () {
 
 
 // HERO TEXT STAGGER DESKTOP
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("DOMContentLoaded", function() {
   function initGSAPAnimation() {
     let isTabletOrBelow = window.innerWidth <= 991;
   
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ease: "power3.out",
     delay: 1,
     scrollTrigger: {
-      trigger: ".layout-inner.IS--ABOUT",
+      trigger: ".layout-hero",
       start: "top 80%",
       end: "bottom 20%",
       toggleActions: isTabletOrBelow ? "play none none none" : "none none none none", 
