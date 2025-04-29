@@ -257,7 +257,6 @@ window.addEventListener("DOMContentLoaded", () => {
 	  trigger: pinHeight,
 	  start: 'top top',
 	  end: 'bottom bottom',
-	  end: "+=1000", // <- add this
 	  pin: container,
 	  pinSpacing: false,
 	  scrub: 0.4
