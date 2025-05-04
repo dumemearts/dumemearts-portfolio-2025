@@ -1,8 +1,5 @@
 // MWG CERTIFIED CARDS
 window.onload = function () {
-  // ✅ Only run animation on desktop (greater than 991px)
-  if (window.innerWidth <= 991) return;
-
   const container = document.querySelector('.layout-component .layout-container');
   if (!container) return;
 
@@ -83,49 +80,36 @@ window.onload = function () {
 };
 
 
-
-
-
 // MWG SPIRAL CARDS 
 window.addEventListener("DOMContentLoaded", () => {
-  // OPTIONAL: Lenis Smooth Scroll
-  const lenis = new Lenis({ autoRaf: true });
 
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
+// Hide scroll label on scroll start
+gsap.to('.scroll', {
+  autoAlpha: 0,
+  duration: 0.2,
+  scrollTrigger: {
+    trigger: '.spiral-cards',
+    start: 'top top',
+    end: 'top top-=1',
+    toggleActions: "play none reverse none"
   }
-  requestAnimationFrame(raf);
-
-  // Hide scroll label on scroll start
-  gsap.to('.scroll', {
-    autoAlpha: 0,
-    duration: 0.2,
-    scrollTrigger: {
-      trigger: '.spiral-cards',
-      start: 'top top',
-      end: 'top top-=1',
-      toggleActions: "play none reverse none"
-    }
-  });
-
-  // 3D Y rotation on scroll for each media element
-  const medias = document.querySelectorAll('.spiral-cards .about-media');
-  medias.forEach(media => {
-    gsap.to(media, {
-      rotationY: 360,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: media,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 0.4
-      }
-    });
-  });
 });
 
-
+// 3D Y rotation on scroll for each media element
+const medias = document.querySelectorAll('.spiral-cards .about-media');
+medias.forEach(media => {
+  gsap.to(media, {
+    rotationY: 360,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: media,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 0.4
+    }
+  });
+});
+});
 
 
 
@@ -178,4 +162,3 @@ document.addEventListener('DOMContentLoaded', function() {
     .to({}, { duration: 2 })
     .repeat(-1);
 });
-
